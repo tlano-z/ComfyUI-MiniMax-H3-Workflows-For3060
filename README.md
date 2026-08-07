@@ -8,13 +8,15 @@ RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Tex
 - `MiniMax-H3_I2V.json` — Image to Video
 - `MiniMax-H3_T2V_TAE-Preview.json` — T2V＋TAEライブプレビュー
 - `MiniMax-H3_I2V_TAE-Preview.json` — I2V＋TAEライブプレビュー
+- `MiniMax-H3_T2V_TAE-Preview_Turbo.json` — T2V＋Turbo LoRA＋TAEライブプレビュー
+- `MiniMax-H3_I2V_TAE-Preview_Turbo.json` — I2V＋Turbo LoRA＋TAEライブプレビュー
 
 ## ハードウェア・実行環境
 
 - **GPU:** NVIDIA GeForce RTX 3060 12GB
 - **RAM:** 64GB
 - **GPUドライバー:** 591.86
-- **ComfyUI:** 0.30.0（[PR #15334](https://github.com/Comfy-Org/ComfyUI/pull/15334) のMiniMax-H3 int8 ConvRot Video VAE対応を含むビルド）
+- **ComfyUI:** 0.30.0（commit `a464ac33`、[PR #15334](https://github.com/Comfy-Org/ComfyUI/pull/15334) のMiniMax-H3 int8 ConvRot Video VAE対応を含むビルド）
 - **Python:** 3.10.10
 - **PyTorch:** 2.11.0+cu130
 - **CUDA Runtime:** 13.0
@@ -56,6 +58,19 @@ ComfyUI/models/vae/minimax_h3_video_vae_int8_convrot.safetensors
 
 モデル群はRTX 3060の12GB VRAMには収まらないため、ComfyUIのDynamic VRAMとCPUオフロードを使用します。
 
+### Turbo LoRA（Turbo版のみ）
+
+`minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetensors`
+
+配置先：
+
+```text
+ComfyUI/models/loras/minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetensors
+```
+
+- **関連プロジェクト:** [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo)
+- **変換版LoRA:** [MiniMax-H3-Turbo-Lora-ComfyUI](https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI)
+
 ## 生成設定
 
 - **Sampling steps:** 25
@@ -66,6 +81,16 @@ ComfyUI/models/vae/minimax_h3_video_vae_int8_convrot.safetensors
 - **Dynamic VRAM／CPUオフロード:** 有効
 - **CUDAモジュール遅延ロード:** 有効
 - **生成中プレビュー:** 通常版では無効
+
+### Turbo LoRA版
+
+- **LoRA strength:** 1.0
+- **Sampling steps:** 8
+- **Sampler:** `res_multistep`
+- **Scheduler:** `simple`
+- **Video／Audio sigma shift:** 12／5
+- **EasyCache:** 無効
+- **生成中プレビュー:** TAEライブプレビューを使用
 
 ## TAEプレビュー版の追加要件
 
