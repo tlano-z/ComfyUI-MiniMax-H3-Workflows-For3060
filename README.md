@@ -58,18 +58,22 @@ ComfyUI/models/vae/minimax_h3_video_vae_int8_convrot.safetensors
 
 モデル群はRTX 3060の12GB VRAMには収まらないため、ComfyUIのDynamic VRAMとCPUオフロードを使用します。
 
-### Turbo LoRA（Turbo版のみ）
+## Turbo LoRA版
 
-`minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetensors`
+Turbo版では、Turbo LoRAを適用したT2V／I2Vワークフローを収録しています。
 
-配置先：
+- **LoRA:** `minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetensors`
+- **配置先:** `ComfyUI/models/loras/`
+- **LoRA strength:** 1.0
+- **Sampling steps:** 8
+- **Sampler:** `res_multistep`
+- **Scheduler:** `simple`
+- **Video／Audio sigma shift:** 12／5
+- **EasyCache:** 無効
 
-```text
-ComfyUI/models/loras/minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetensors
-```
+**導入したLoRA:** [MiniMax-H3-Turbo-Lora-ComfyUI](https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI) (MiniMax-H3本体がprunedのためこちらを使用)
 
-- **関連プロジェクト:** [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo)
-- **変換版LoRA:** [MiniMax-H3-Turbo-Lora-ComfyUI](https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI)
+**関連プロジェクト:** [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo)
 
 ## 生成設定
 
@@ -81,16 +85,6 @@ ComfyUI/models/loras/minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetenso
 - **Dynamic VRAM／CPUオフロード:** 有効
 - **CUDAモジュール遅延ロード:** 有効
 - **生成中プレビュー:** 通常版では無効
-
-### Turbo LoRA版
-
-- **LoRA strength:** 1.0
-- **Sampling steps:** 8
-- **Sampler:** `res_multistep`
-- **Scheduler:** `simple`
-- **Video／Audio sigma shift:** 12／5
-- **EasyCache:** 無効
-- **生成中プレビュー:** TAEライブプレビューを使用
 
 ## TAEプレビュー版の追加要件
 
