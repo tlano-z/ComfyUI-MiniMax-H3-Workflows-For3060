@@ -1,6 +1,6 @@
 # ComfyUI-MiniMax-H3-Workflows-For3060
 
-RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Text to Video）／I2V（Image to Video）用ComfyUIワークフローです。
+RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Text to Video）／I2V（Image to Video）／R2V（Reference to Video）用ComfyUIワークフローです。
 
 ## 収録ワークフロー
 
@@ -10,6 +10,8 @@ RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Tex
 - `MiniMax-H3_I2V_TAE-Preview.json` — I2V＋TAEライブプレビュー
 - `MiniMax-H3_T2V_TAE-Preview_Turbo.json` — T2V＋Turbo LoRA＋TAEライブプレビュー
 - `MiniMax-H3_I2V_TAE-Preview_Turbo.json` — I2V＋Turbo LoRA＋TAEライブプレビュー
+- `MiniMax-H3_R2V_Turbo_2images/` — 2枚の参照画像を使用するR2V Turbo
+- `MiniMax-H3_R2V_Turbo_Lip-sync/` — 参照画像と音声を使用するR2V Turboリップシンク
 
 ## ハードウェア・実行環境
 
@@ -26,10 +28,24 @@ RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Tex
 
 ## 使用モデル
 
-### MiniMax-H3本体
+### T2V／I2V用MiniMax-H3本体
 
 `minimax_h3_fl2va_pruned_int8_convrot.safetensors`  
 約20.97GB
+
+### R2V用MiniMax-H3本体
+
+`minimax_h3_ref2va_pruned_int8_convrot.safetensors`  
+約20.97GB
+
+配布元：  
+[Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3/blob/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)
+
+配置先：
+
+```text
+ComfyUI/models/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors
+```
 
 ### テキストエンコーダー
 
@@ -60,7 +76,7 @@ ComfyUI/models/vae/minimax_h3_video_vae_int8_convrot.safetensors
 
 ## Turbo LoRA版
 
-Turbo版では、Turbo LoRAを適用したT2V／I2Vワークフローを収録しています。
+Turbo版では、Turbo LoRAを適用したT2V／I2V／R2Vワークフローを収録しています。
 
 - **LoRA:** `minimax_h3_turbo_4step_ema_ckpt850_pruned_comfyui.safetensors`
 - **配置先:** `ComfyUI/models/loras/`
@@ -74,6 +90,68 @@ Turbo版では、Turbo LoRAを適用したT2V／I2Vワークフローを収録�
 **導入したLoRA:** [MiniMax-H3-Turbo-Lora-ComfyUI](https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI) (MiniMax-H3本体がprunedのためこちらを使用)
 
 **関連プロジェクト:** [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo)
+
+## R2V Turbo版
+
+R2V Turbo版は、Workflow JSON、オリジナルの入力素材、生成結果をフォルダ単位で収録しています。いずれも公式サンプルプロンプトではなく、Workflow内のオリジナルプロンプトを使用しています。
+
+### MiniMax-H3_R2V_Turbo_2images
+
+2枚の参照画像から、キャラクター、料理、ビジュアルスタイルを参照して動画を生成するWorkflowです。
+
+- **参照画像:** 2枚
+- **画面比率:** 16:9
+- **解像度設定:** 0.4MP
+- **生成時間:** 5秒
+- **フレームレート:** 24fps
+- **音声出力:** 有効
+- **TAEライブプレビュー:** 有効
+
+収録ファイル：
+
+- [`MiniMax-H3_R2V_Turbo_2images.json`](MiniMax-H3_R2V_Turbo_2images/MiniMax-H3_R2V_Turbo_2images.json) — Workflow
+- [`3menzu.png`](MiniMax-H3_R2V_Turbo_2images/3menzu.png) — 参照画像1
+- [`lowpoly_ramen.png`](MiniMax-H3_R2V_Turbo_2images/lowpoly_ramen.png) — 参照画像2
+- [`MiniMax-H3_R2V_Turbo_2images.mp4`](MiniMax-H3_R2V_Turbo_2images/MiniMax-H3_R2V_Turbo_2images.mp4) — 生成結果
+
+<table>
+<tr>
+<td align="center"><strong>参照画像1</strong></td>
+<td align="center"><strong>参照画像2</strong></td>
+</tr>
+<tr>
+<td><img src="MiniMax-H3_R2V_Turbo_2images/3menzu.png" width="320" alt="Reference image 1"></td>
+<td><img src="MiniMax-H3_R2V_Turbo_2images/lowpoly_ramen.png" width="320" alt="Reference image 2"></td>
+</tr>
+</table>
+
+[生成結果を表示](MiniMax-H3_R2V_Turbo_2images/MiniMax-H3_R2V_Turbo_2images.mp4)
+
+### MiniMax-H3_R2V_Turbo_Lip-sync
+
+参照画像のキャラクターに、入力音声と同期した口・表情・身体の動きを生成するWorkflowです。  
+入力音声と一致したセリフをプロンプトに書くことで出力を安定させています。
+
+- **参照画像:** 1枚
+- **参照音声:** 1ファイル
+- **画面比率:** 1:1
+- **解像度設定:** 0.4MP
+- **生成時間:** 13秒
+- **フレームレート:** 24fps
+- **音声出力:** 有効
+- **TAEライブプレビュー:** 有効
+
+収録ファイル：
+
+- [`MiniMax-H3_R2V_Turbo_Lip-sync.json`](MiniMax-H3_R2V_Turbo_Lip-sync/MiniMax-H3_R2V_Turbo_Lip-sync.json) — Workflow
+- [`Image.png`](MiniMax-H3_R2V_Turbo_Lip-sync/Image.png) — 参照画像
+- [`Audio.wav`](MiniMax-H3_R2V_Turbo_Lip-sync/Audio.wav) — 参照音声
+- [`MiniMax-H3_R2V_Turbo_Lip-sync.mp4`](MiniMax-H3_R2V_Turbo_Lip-sync/MiniMax-H3_R2V_Turbo_Lip-sync.mp4) — 生成結果
+
+<img src="MiniMax-H3_R2V_Turbo_Lip-sync/Image.png" width="320" alt="Lip-sync reference image">
+
+- [参照音声を再生](MiniMax-H3_R2V_Turbo_Lip-sync/Audio.wav)
+- [生成結果を表示](MiniMax-H3_R2V_Turbo_Lip-sync/MiniMax-H3_R2V_Turbo_Lip-sync.mp4)
 
 ## 生成設定
 
