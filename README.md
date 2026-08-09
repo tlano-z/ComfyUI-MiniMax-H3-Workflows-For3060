@@ -156,9 +156,10 @@ R2V Turbo版は、Workflow JSON、オリジナルの入力素材、生成結果�
 ## 生成設定
 
 - **Sampling steps:** 25
-- **EasyCache reuse_threshold:** 0.300
-- **EasyCache start_percent:** 0.200
-- **EasyCache end_percent:** 0.900
+- **EasyCache reuse_threshold:** 0.3
+- **EasyCache start_percent:** 0.2
+- **EasyCache end_percent:** 0.9
+- **EasyCache:** Turbo LoRA版（T2V／I2V／R2V）では無効
 - **SageAttention:** 有効
 - **Dynamic VRAM／CPUオフロード:** 有効
 - **CUDAモジュール遅延ロード:** 有効
