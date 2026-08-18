@@ -1,6 +1,6 @@
 # ComfyUI-MiniMax-H3-Workflows-For3060
 
-RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Text to Video）／I2V（Image to Video）／R2V（Reference to Video）用ComfyUIワークフローです。
+RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Text to Video）／I2V（Image to Video）／R2V（Reference to Video）／R2I（Reference to Image）用ComfyUIワークフローです。
 
 ## 収録ワークフロー
 
@@ -12,6 +12,7 @@ RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Tex
 - `MiniMax-H3_I2V_TAE-Preview_Turbo.json` — I2V＋Turbo LoRA＋TAEライブプレビュー
 - `MiniMax-H3_R2V_Turbo_2images/` — 2枚の参照画像を使用するR2V Turbo
 - `MiniMax-H3_R2V_Turbo_Lip-sync/` — 参照画像と音声を使用するR2V Turboリップシンク
+- `MiniMax-H3_R2I/` — 2枚の参照画像から1枚の静止画を生成するR2I
 
 ## ハードウェア・実行環境
 
@@ -174,3 +175,49 @@ R2V Turbo版は、Workflow JSON、オリジナルの入力素材、生成結果�
 - **プレビュー設定:** 最大512px、JPEG品質80、12フレーム、12fps
 
 TAEは生成中のプレビューにのみ使用し、最終動画のデコードには`minimax_h3_video_vae_int8_convrot.safetensors`を使用します。
+
+## R2I（Reference to Image）版
+
+`MiniMax-H3_R2I/`は、MiniMax-H3のRef2VA参照conditioningを使用し、動画ではなく静止画を1枚だけ生成するWorkflowです。[ComfyUI PR #15677](https://github.com/Comfy-Org/ComfyUI/pull/15677)で追加された通常の`Empty Latent Image`経路を使用し、1フレームだけサンプリングして単一画像用VAEでデコードします。
+
+`MiniMax H3 Reference to Video`ノードはconditioning出力だけを使用し、同ノードが作る動画latentはサンプラーへ接続しません。プロンプト内の`<Picture 1>`、`<Picture 2>`は、入力した参照画像の順番に対応します。
+
+### 追加要件
+
+- **ComfyUI:** [PR #15677](https://github.com/Comfy-Org/ComfyUI/pull/15677)の変更を含むバージョン
+- **単一画像用VAE:** [`minimax_h3_t1_image_vae_step1597.safetensors`](https://huggingface.co/Mamad8/MiniMax-H3-Image-VAE/blob/main/minimax_h3_t1_image_vae_step1597.safetensors)
+- **VAE配置先:** `ComfyUI/models/vae/`
+
+単一画像用VAEは、この静止画Workflowだけで使用してください。動画WorkflowのVideo VAEとは置き換えないでください。
+
+`audio_vae`は`MiniMax H3 Reference to Video`ノードの必須入力なので接続しています。収録Workflowは参照画像だけを使用するため、音声のencode／decode処理は実行されません。
+
+### 生成設定
+
+- **MiniMax-H3本体:** `minimax_h3_ref2va_pruned_int8_convrot.safetensors`
+- **Turbo LoRA:** 無効
+- **Sampling steps:** 30
+- **Sampler:** `res_multistep`
+- **Scheduler:** `simple`
+- **出力:** PNG 1枚
+- **収録出力の解像度:** 2048x2048
+
+収録ファイル：
+
+- [`MiniMax-H3_R2I.json`](MiniMax-H3_R2I/MiniMax-H3_R2I.json) — Workflow
+- [`test_a.png`](MiniMax-H3_R2I/test_a.png) — 参照画像1
+- [`test_b.png`](MiniMax-H3_R2I/test_b.png) — 参照画像2
+- [`Output.png`](MiniMax-H3_R2I/Output.png) — 生成結果
+
+<table>
+<tr>
+<td align="center"><strong>参照画像1</strong></td>
+<td align="center"><strong>参照画像2</strong></td>
+<td align="center"><strong>生成結果</strong></td>
+</tr>
+<tr>
+<td><img src="MiniMax-H3_R2I/test_a.png" width="260" alt="R2I reference image 1"></td>
+<td><img src="MiniMax-H3_R2I/test_b.png" width="260" alt="R2I reference image 2"></td>
+<td><img src="MiniMax-H3_R2I/Output.png" width="260" alt="R2I output image"></td>
+</tr>
+</table>

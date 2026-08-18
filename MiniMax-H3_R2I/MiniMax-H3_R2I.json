@@ -1,0 +1,1041 @@
+{
+  "id": "f71a29c8-9d7b-4277-b120-ad2fcc4d6d37",
+  "revision": 0,
+  "last_node_id": 18,
+  "last_link_id": 20,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        -1620,
+        -700
+      ],
+      "size": [
+        590,
+        90
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            10,
+            11
+          ]
+        }
+      ],
+      "title": "MiniMax H3 diffusion model",
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        -1620,
+        -560
+      ],
+      "size": [
+        590,
+        120
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "title": "MiniMax H3 Qwen encoder",
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "models": [
+          {
+            "name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "directory": "text_encoders"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "type": "minimax",
+        "device": "default"
+      }
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        -1620,
+        -390
+      ],
+      "size": [
+        590,
+        70
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            2,
+            19
+          ]
+        }
+      ],
+      "title": "MiniMax H3 single-image VAE",
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "minimax_h3_t1_image_vae_step1597.safetensors",
+            "url": "https://huggingface.co/Mamad8/MiniMax-H3-Image-VAE/resolve/main/minimax_h3_t1_image_vae_step1597.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "minimax_h3_t1_image_vae_step1597.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_t1_image_vae_step1597.safetensors"
+      }
+    },
+    {
+      "id": 7,
+      "type": "KSamplerSelect",
+      "pos": [
+        -549.4117647058823,
+        -696.1764705882358
+      ],
+      "size": [
+        320,
+        70
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSamplerSelect"
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      }
+    },
+    {
+      "id": 8,
+      "type": "BasicScheduler",
+      "pos": [
+        -544.5588235294118,
+        -571.3235294117648
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BasicScheduler"
+      },
+      "widgets_values": [
+        "simple",
+        30,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 30,
+        "denoise": 1
+      }
+    },
+    {
+      "id": 9,
+      "type": "VAELoader",
+      "pos": [
+        -1620,
+        -270
+      ],
+      "size": [
+        590,
+        70
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "title": "MiniMax H3 audio VAE (required by R2V node; unused for image-only refs)",
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "minimax_h3_audio_vae_fp32.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+      }
+    },
+    {
+      "id": 10,
+      "type": "LoadImage",
+      "pos": [
+        -1555.3927573529406,
+        648.1571029411764
+      ],
+      "size": [
+        440,
+        314
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "title": "Reference image 1 (<Picture 1>)",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "test_a.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "test_a.png",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        -1055.3927573529404,
+        648.1571029411764
+      ],
+      "size": [
+        440,
+        314
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "title": "Reference image 2 (<Picture 2>)",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "test_b.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "test_b.png",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 13,
+      "type": "EmptyLatentImage",
+      "pos": [
+        -992.9411764705894,
+        -697.9411764705882
+      ],
+      "size": [
+        410,
+        150
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 8
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            17
+          ]
+        }
+      ],
+      "title": "One-frame Empty Latent (PR 15677)",
+      "properties": {
+        "Node name for S&R": "EmptyLatentImage"
+      },
+      "widgets_values": [
+        1024,
+        576,
+        1
+      ],
+      "widgets_values_named": {
+        "width": 1024,
+        "height": 576,
+        "batch_size": 1
+      }
+    },
+    {
+      "id": 14,
+      "type": "BasicGuider",
+      "pos": [
+        -539.7058823529411,
+        -390.73529411764696
+      ],
+      "size": [
+        320,
+        90
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 11
+        },
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BasicGuider"
+      }
+    },
+    {
+      "id": 16,
+      "type": "VAEDecode",
+      "pos": [
+        118.02941176470591,
+        -686.5882352941172
+      ],
+      "size": [
+        250,
+        90
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 18
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 18,
+      "type": "MarkdownNote",
+      "pos": [
+        -1557.2225308823524,
+        -30.15091735294054
+      ],
+      "size": [
+        502.0147058823534,
+        431.6323529411767
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "MiniMax-H3_R2I",
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "## MiniMax-H3_R2I\n\nThis workflow keeps the model-specific reference conditioning from `MiniMax H3 Reference to Video`, but intentionally ignores that node's video latent. Sampling uses the regular one-frame `Empty Latent Image` path added by ComfyUI PR 15677.\n\n- Turbo LoRA: disabled\n- Sampling: 30 steps / `res_multistep` / `simple`\n- Decode/reference VAE: `minimax_h3_t1_image_vae_step1597.safetensors` (single-image only)\n- Audio VAE: connected because `MiniMax H3 Reference to Video` declares `audio_vae` as a required input. It is not encoded or decoded when only reference images are connected.\n- Reference tags: `<Picture 1>`, `<Picture 2>`\n- Output: one PNG\n\nEnter exact pixel dimensions in Width and Height. Both values must be multiples of 32. Useful presets:\n\n| Ratio | 1K | 2K |\n|---|---:|---:|\n| 16:9 | 1024×576 | 2048×1152 |\n| 9:16 | 576×1024 | 1152×2048 |\n| 4:3 | 1024×768 | 2048×1536 |\n| 3:4 | 768×1024 | 1536×2048 |\n| 1:1 | 1024×1024 | 2048×2048 |\n\nThe `length=5` value belongs only to the unused conditioning node latent; it does not cause five target frames to be sampled. Do not use this image VAE for multi-frame video workflows."
+      ],
+      "widgets_values_named": {
+        "text": "## MiniMax-H3_R2I\n\nThis workflow keeps the model-specific reference conditioning from `MiniMax H3 Reference to Video`, but intentionally ignores that node's video latent. Sampling uses the regular one-frame `Empty Latent Image` path added by ComfyUI PR 15677.\n\n- Turbo LoRA: disabled\n- Sampling: 30 steps / `res_multistep` / `simple`\n- Decode/reference VAE: `minimax_h3_t1_image_vae_step1597.safetensors` (single-image only)\n- Audio VAE: connected because `MiniMax H3 Reference to Video` declares `audio_vae` as a required input. It is not encoded or decoded when only reference images are connected.\n- Reference tags: `<Picture 1>`, `<Picture 2>`\n- Output: one PNG\n\nEnter exact pixel dimensions in Width and Height. Both values must be multiples of 32. Useful presets:\n\n| Ratio | 1K | 2K |\n|---|---:|---:|\n| 16:9 | 1024×576 | 2048×1152 |\n| 9:16 | 576×1024 | 1152×2048 |\n| 4:3 | 1024×768 | 2048×1536 |\n| 3:4 | 768×1024 | 1536×2048 |\n| 1:1 | 1024×1024 | 2048×2048 |\n\nThe `length=5` value belongs only to the unused conditioning node latent; it does not cause five target frames to be sampled. Do not use this image VAE for multi-frame video workflows."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 6,
+      "type": "RandomNoise",
+      "pos": [
+        -996.8339338235279,
+        -21.53407352941213
+      ],
+      "size": [
+        320,
+        90
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            13
+          ]
+        }
+      ],
+      "title": "Seed (fixed)",
+      "properties": {
+        "Node name for S&R": "RandomNoise"
+      },
+      "widgets_values": [
+        9982005503261,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "noise_seed": 9982005503261,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 15,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        162.06235294117565,
+        -10.305000000001602
+      ],
+      "size": [
+        433.1550802139034,
+        514.502673796791
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "noise",
+          "type": "NOISE",
+          "link": 13
+        },
+        {
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 14
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 15
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 16
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            18
+          ]
+        },
+        {
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SamplerCustomAdvanced"
+      }
+    },
+    {
+      "id": 17,
+      "type": "SaveImage",
+      "pos": [
+        646.6641048128355,
+        -13.283382219251656
+      ],
+      "size": [
+        580.9786096256678,
+        693.4197860962556
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "image/MiniMax-H3_R2I"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "image/MiniMax-H3_R2I"
+      }
+    },
+    {
+      "id": 12,
+      "type": "MiniMaxH3ReferenceToVideo",
+      "pos": [
+        -629.4368749999996,
+        -18.46054411764756
+      ],
+      "size": [
+        659.3676470588234,
+        580.5294117647059
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 1
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 2
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 3
+        },
+        {
+          "label": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 4
+        },
+        {
+          "label": "ref_image_1",
+          "name": "ref_images.ref_image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "label": "ref_image_2",
+          "name": "ref_images.ref_image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 6
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "title": "MiniMax-H3_R2I conditioning (R2V node; positive output only)",
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ReferenceToVideo"
+      },
+      "widgets_values": [
+        "The character in <Picture 1> is wearing the clothes of the character in <Picture 2>. The background is a live-action cafe. Do not draw the character from <Picture 2>.",
+        1024,
+        576,
+        5,
+        "match"
+      ],
+      "widgets_values_named": {
+        "prompt": "The character in <Picture 1> is wearing the clothes of the character in <Picture 2>. The background is a live-action cafe. Do not draw the character from <Picture 2>.",
+        "width": 1024,
+        "height": 576,
+        "length": 5,
+        "ref_image_size": "match"
+      }
+    },
+    {
+      "id": 4,
+      "type": "PrimitiveInt",
+      "pos": [
+        -999.9074632352924,
+        257.51004411764666
+      ],
+      "size": [
+        260,
+        82
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            6,
+            8
+          ]
+        }
+      ],
+      "title": "Width (pixels)",
+      "properties": {
+        "Node name for S&R": "PrimitiveInt"
+      },
+      "widgets_values": [
+        2048,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 2048,
+        "fixed": "fixed"
+      }
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveInt",
+      "pos": [
+        -1005.7309926470574,
+        399.64239705882324
+      ],
+      "size": [
+        260,
+        82
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            7,
+            9
+          ]
+        }
+      ],
+      "title": "Height (pixels)",
+      "properties": {
+        "Node name for S&R": "PrimitiveInt"
+      },
+      "widgets_values": [
+        2048,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 2048,
+        "fixed": "fixed"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      12,
+      0,
+      "CLIP"
+    ],
+    [
+      2,
+      3,
+      0,
+      12,
+      1,
+      "VAE"
+    ],
+    [
+      3,
+      9,
+      0,
+      12,
+      2,
+      "VAE"
+    ],
+    [
+      4,
+      10,
+      0,
+      12,
+      3,
+      "IMAGE"
+    ],
+    [
+      5,
+      11,
+      0,
+      12,
+      4,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      0,
+      12,
+      9,
+      "INT"
+    ],
+    [
+      7,
+      5,
+      0,
+      12,
+      10,
+      "INT"
+    ],
+    [
+      8,
+      4,
+      0,
+      13,
+      0,
+      "INT"
+    ],
+    [
+      9,
+      5,
+      0,
+      13,
+      1,
+      "INT"
+    ],
+    [
+      10,
+      1,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      11,
+      1,
+      0,
+      14,
+      0,
+      "MODEL"
+    ],
+    [
+      12,
+      12,
+      0,
+      14,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      13,
+      6,
+      0,
+      15,
+      0,
+      "NOISE"
+    ],
+    [
+      14,
+      14,
+      0,
+      15,
+      1,
+      "GUIDER"
+    ],
+    [
+      15,
+      7,
+      0,
+      15,
+      2,
+      "SAMPLER"
+    ],
+    [
+      16,
+      8,
+      0,
+      15,
+      3,
+      "SIGMAS"
+    ],
+    [
+      17,
+      13,
+      0,
+      15,
+      4,
+      "LATENT"
+    ],
+    [
+      18,
+      15,
+      0,
+      16,
+      0,
+      "LATENT"
+    ],
+    [
+      19,
+      3,
+      0,
+      16,
+      1,
+      "VAE"
+    ],
+    [
+      20,
+      16,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Input",
+      "bounding": [
+        -1605.3927573529406,
+        -133.5683892526955,
+        1677.441591158042,
+        1121.725492193872
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Output",
+      "bounding": [
+        129.44080586392332,
+        -126.67080837034237,
+        1536.7379411764693,
+        1113.0391176470575
+      ],
+      "color": "#a1309b",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "frontendVersion": "1.49.6",
+    "ds": {
+      "scale": 0.702479338842978,
+      "offset": [
+        2539.83437432867,
+        480.6803576723983
+      ]
+    }
+  },
+  "version": 0.4
+}
