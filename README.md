@@ -12,7 +12,7 @@ RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Tex
 - `MiniMax-H3_I2V_TAE-Preview_Turbo.json` — I2V＋Turbo LoRA＋TAEライブプレビュー
 - `MiniMax-H3_R2V_Turbo_2images/` — 2枚の参照画像を使用するR2V Turbo
 - `MiniMax-H3_R2V_Turbo_Lip-sync/` — 参照画像と音声を使用するR2V Turboリップシンク
-- `MiniMax-H3_R2I/` — 2枚の参照画像から1枚の静止画を生成するR2I
+- `MiniMax-H3_R2I/` — 2枚の参照画像から1枚の静止画を生成するR2I（通常版／Turbo LoRA版）
 
 ## ハードウェア・実行環境
 
@@ -192,7 +192,7 @@ TAEは生成中のプレビューにのみ使用し、最終動画のデコー�
 
 `audio_vae`は`MiniMax H3 Reference to Video`ノードの必須入力なので接続しています。収録Workflowは参照画像だけを使用するため、音声のencode／decode処理は実行されません。
 
-### 生成設定
+### 通常版の生成設定
 
 - **MiniMax-H3本体:** `minimax_h3_ref2va_pruned_int8_convrot.safetensors`
 - **Turbo LoRA:** 無効
@@ -202,9 +202,22 @@ TAEは生成中のプレビューにのみ使用し、最終動画のデコー�
 - **出力:** PNG 1枚
 - **収録出力の解像度:** 2048x2048
 
+### Turbo LoRA版の生成設定
+
+`MiniMax-H3_R2I_Turbo.json`は、次のTurbo LoRAと生成設定を使用します。
+
+- **LoRA:** [`minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors`](https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI/blob/main/minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors)
+- **配置先:** `ComfyUI/models/loras/`
+- **LoRA strength:** 1.0
+- **Sampling steps:** 8
+- **Sampler:** `euler`
+- **Scheduler:** `beta`
+- **出力:** PNG 1枚
+
 収録ファイル：
 
 - [`MiniMax-H3_R2I.json`](MiniMax-H3_R2I/MiniMax-H3_R2I.json) — Workflow
+- [`MiniMax-H3_R2I_Turbo.json`](MiniMax-H3_R2I/MiniMax-H3_R2I_Turbo.json) — Turbo LoRA版Workflow
 - [`test_a.png`](MiniMax-H3_R2I/test_a.png) — 参照画像1
 - [`test_b.png`](MiniMax-H3_R2I/test_b.png) — 参照画像2
 - [`Output.png`](MiniMax-H3_R2I/Output.png) — 生成結果
