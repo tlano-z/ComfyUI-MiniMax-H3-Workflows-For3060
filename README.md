@@ -10,6 +10,7 @@ RTX 3060 12GB環境でMiniMax-H3をローカル実行するための、T2V（Tex
 - `MiniMax-H3_I2V_TAE-Preview.json` — I2V＋TAEライブプレビュー
 - `MiniMax-H3_T2V_TAE-Preview_Turbo.json` — T2V＋Turbo LoRA＋TAEライブプレビュー
 - `MiniMax-H3_I2V_TAE-Preview_Turbo.json` — I2V＋Turbo LoRA＋TAEライブプレビュー
+- `MiniMax-H3_R2V_PDD_Acc.json` — 2枚の参照画像を使用するR2V＋Alibaba PAI PDD Acc＋TAEライブプレビュー
 - `MiniMax-H3_R2V_Turbo_2images/` — 2枚の参照画像を使用するR2V Turbo
 - `MiniMax-H3_R2V_Turbo_Lip-sync/` — 参照画像と音声を使用するR2V Turboリップシンク
 - `MiniMax-H3_R2I/` — 2枚の参照画像から1枚の静止画を生成するR2I（通常版／Turbo LoRA版）
@@ -91,6 +92,37 @@ Turbo版では、Turbo LoRAを適用したT2V／I2V／R2Vワークフローを�
 **導入したLoRA:** [MiniMax-H3-Turbo-Lora-ComfyUI](https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI) (MiniMax-H3本体がprunedのためこちらを使用)
 
 **関連プロジェクト:** [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo)
+
+## R2V PDD Acc版
+
+[`MiniMax-H3_R2V_PDD_Acc.json`](MiniMax-H3_R2V_PDD_Acc.json)は、Alibaba PAIが公開したMiniMax-H3 Ref2VA用PDD Accを使用し、2枚の参照画像から動画と音声を8 NFEで生成するWorkflowです。TAEライブプレビュー、解像度プリセット、秒数からフレーム数への自動変換、生成音声のON／OFF切り替えを備えています。
+
+PDD Accファイルは通常のLoRAだけでなく、ステップごとのPDD head bankを含みます。そのため、通常の`Load LoRA`ノードではなく、専用カスタムノードの`MiniMaxH3PDDAccApply`を使用します。
+
+- **LoRA配布元:** [alibaba-pai/MiniMax-H3-Acc-LoRAs](https://huggingface.co/alibaba-pai/MiniMax-H3-Acc-LoRAs)
+- **カスタムノード:** [Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc](https://github.com/Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc)
+- **使用ファイル:** `MiniMax-H3-Ref2VA-Acc-8Step.safetensors`
+- **配置先:** `ComfyUI/models/pdd_acc/`
+- **MiniMax-H3本体:** `minimax_h3_ref2va_pruned_int8_convrot.safetensors`
+- **NFE:** 8
+- **Sampler:** `euler`
+- **Sigmas:** `MiniMaxH3PDDAccApply`ノードの`sigmas`出力
+- **Guidance:** `BasicGuider`（CFG-free）
+- **Video／Audio sigma shift:** 12／3
+- **LoRA／PDD head strength:** 1.0／1.0
+- **画面比率・解像度:** 16:9、0.4MP、32の倍数
+- **生成時間:** 初期値5秒（24fpsの有効フレーム数へ自動変換、5秒時は124フレーム）
+- **TAEライブプレビュー:** 有効、Workflow内でON／OFF切り替え可能
+- **生成音声:** 有効、Workflow内でON／OFF切り替え可能
+
+カスタムノードの導入例：
+
+```bash
+cd ComfyUI/custom_nodes
+git clone https://github.com/Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc.git
+```
+
+PDD Accは学習済みの専用sigma境界を使用するため、Turbo LoRA、EasyCache、BlockCache、Spectrum、`res_multistep`などのマルチステップサンプラーとは併用しないでください。TAEプレビューには、後述するComfyUI-KJNodesと`taeh3.safetensors`も必要です。
 
 ## R2V Turbo版
 
